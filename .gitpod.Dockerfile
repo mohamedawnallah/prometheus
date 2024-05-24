@@ -11,10 +11,6 @@ RUN echo "nvm use default &>/dev/null" >> ~/.bashrc.d/51-nvm-fix
 
 # Remove any existing Go installation in $HOME path.
 RUN rm -rf $HOME/go $HOME/go-packages
-
-# Fetch the Go version dynamically from the Prometheus go.mod file.
-RUN GO_VERSION=$(curl -sSL "https://raw.githubusercontent.com/prometheus/prometheus/main/go.mod" | awk '/^go/{print $2".0"}') && \
-    echo "export GO_VERSION=${GO_VERSION}" >> ~/.bashrc.d/300-go
     
 # Export go environment variables.
 RUN echo "export GOPATH=/workspace/go" >> ~/.bashrc.d/300-go && \
@@ -23,8 +19,11 @@ RUN echo "export GOPATH=/workspace/go" >> ~/.bashrc.d/300-go && \
     echo "export PATH=\$GOROOT/bin:\$GOBIN:\$PATH" >> ~/.bashrc
 
 # Reload the environment variables to ensure go environment variables are
-# available in subsequent commands and Install Go in $HOME path.
-RUN bash -c "source ~/.bashrc && source ~/.bashrc.d/300-go" && \
+# available in subsequent commands.
+RUN bash -c "source ~/.bashrc && source ~/.bashrc.d/300-go"
+
+# Fetch the Go version dynamically from the Prometheus go.mod file and Install Go in $HOME path.
+RUN export GO_VERSION=$(curl -sSL "https://raw.githubusercontent.com/prometheus/prometheus/main/go.mod" | awk '/^go/{print $2".0"}') && \
     curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | \
     tar -xz -C $HOME
 
