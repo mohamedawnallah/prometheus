@@ -23,11 +23,9 @@ RUN echo "export GOPATH=/workspace/go" >> ~/.bashrc.d/300-go && \
     echo "export PATH=\$GOROOT/bin:\$GOBIN:\$PATH" >> ~/.bashrc
 
 # Reload the environment variables to ensure go environment variables are
-# available in subsequent commands.
-RUN bash -c "source ~/.bashrc && source ~/.bashrc.d/300-go"
-
-# Install Go in $HOME path.
-RUN curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" |\
+# available in subsequent commands and Install Go in $HOME path.
+RUN bash -c "source ~/.bashrc && source ~/.bashrc.d/300-go" && \
+    curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | \
     tar -xz -C $HOME
 
 # Fetch the goyacc parser version dynamically from the Prometheus Makefile
