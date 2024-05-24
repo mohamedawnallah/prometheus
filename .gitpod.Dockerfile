@@ -23,8 +23,8 @@ RUN echo "export GOPATH=/workspace/go" >> ~/.bashrc.d/300-go && \
 RUN bash -c "source ~/.bashrc && source ~/.bashrc.d/300-go"
 
 # Fetch the Go version dynamically from the Prometheus go.mod file and Install Go in $HOME path.
-RUN export GO_VERSION=$(curl -sSL "https://raw.githubusercontent.com/prometheus/prometheus/main/go.mod" | awk '/^go/{print $2".0"}') && \
-    curl -fsSL "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" | \
+RUN export CUSTOM_GO_VERSION=$(curl -sSL "https://raw.githubusercontent.com/prometheus/prometheus/main/go.mod" | awk '/^go/{print $2".0"}') && \
+    curl -fsSL "https://dl.google.com/go/go${CUSTOM_GO_VERSION}.linux-amd64.tar.gz" | \
     tar -xz -C $HOME
 
 # Fetch the goyacc parser version dynamically from the Prometheus Makefile
