@@ -10,7 +10,7 @@ RUN bash -c ". .nvm/nvm.sh && nvm install ${CUSTOM_NODE_VERSION} && nvm use ${CU
 RUN echo "nvm use default &>/dev/null" >> ~/.bashrc.d/51-nvm-fix
 
 # Remove any existing Go installation in $HOME path.
-RUN rm -rf $HOME/go
+RUN rm -rf $HOME/go $HOME/go-packages
 
 # Fetch the Go version dynamically from the Prometheus go.mod file.
 RUN GO_VERSION=$(curl -sSL "https://raw.githubusercontent.com/prometheus/prometheus/main/go.mod" | awk '/^go/{print $2".0"}') && \
